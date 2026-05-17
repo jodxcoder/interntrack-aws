@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Review Student | InternTrack</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container" style="max-width: 800px;">
+        <a href="/" style="color: var(--primary); text-decoration: none; font-weight: bold;">← Back to Dashboard</a>
+        
+        <h1 style="color: var(--primary); margin-top: 20px;">Student Review Panel 📋</h1>
+
+        <!-- Student Info Card -->
+        <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid var(--border); margin-top: 20px;">
+            <h3 style="margin-top: 0;"><%= application.creator.fullName %></h3>
+            <p style="color: var(--text-muted);"><%= application.creator.email %></p>
+            <p>Applied for: <strong><%= application.companyName %></strong> — <%= application.jobTitle %></p>
+        </div>
+
+        <!-- Resume Download -->
+        <div style="margin-top: 20px;">
+            <% if (application.resumePath) { %>
+                <a href="/<%= application.resumePath.replace(/.*public[\\/]/, '') %>" target="_blank" class="btn btn-primary">📄 View Resume (PDF)</a>
+            <% } else { %>
+                <p style="color: var(--text-muted);">❌ Student has not uploaded a resume yet.</p>
+            <% } %>
+        </div>
+
+        <!-- AI Score Report -->
+        <div style="margin-top: 30px;">
+            <h3>AI ATS Analysis Report 🤖</h3>
+            <% if (application.aiScore) { %>
+                <div class="ai-box" style="background: rgba(99, 102, 241, 0.15); border: 1px solid var(--primary);">
+                    <pre style="white-space: pre-wrap; font-family: inherit; font-size: 1rem; line-height: 1.8; color: #e2e8f0;"><%= application.aiScore %></pre>
+                </div>
+            <% } else { %>
+                <p style="color: var(--text-muted);">❌ Student has not run the AI analysis yet.</p>
+            <% } %>
+        </div>
+
+        <!-- Status Update Form -->
+        <div style="margin-top: 40px; border-top: 2px solid var(--border); padding-top: 30px;">
+            <h3>Your Decision ⚖️</h3>
+            <form action="/internship/update-status/<%= application._id %>" method="POST" style="display: flex; gap: 15px; align-items: center;">
+                <select name="status" style="padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: white; font-size: 1rem; flex: 1;">
+                    <option value="Applied" <%= application.status === 'Applied' ? 'selected' : '' %>>Applied</option>
+                    <option value="Under Review" <%= application.status === 'Under Review' ? 'selected' : '' %>>Under Review</option>
+                    <option value="Interview" <%= application.status === 'Interview' ? 'selected' : '' %>>Interview</option>
+                    <option value="Selected" <%= application.status === 'Selected' ? 'selected' : '' %>>Selected ✅</option>
+                    <option value="Rejected" <%= application.status === 'Rejected' ? 'selected' : '' %>>Rejected ❌</option>
+                </select>
+                <button type="submit" class="btn btn-primary" style="padding: 14px 30px;">Save Decision</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

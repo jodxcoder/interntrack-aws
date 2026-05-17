@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container" style="max-width: 700px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <a href="/" style="color: var(--primary); text-decoration: none; font-weight: bold;">← Back to Dashboard</a>
+            <h1 style="margin: 0;">Add New Opportunity 🏢</h1>
+        </div>
+
+        <form action="/internship" method="POST" style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <input type="text" name="companyName" placeholder="Company Name" required 
+                       style="padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: white;">
+                
+                <input type="text" name="jobTitle" placeholder="Job Title" required 
+                       style="padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: white;">
+            </div>
+
+            <input type="text" name="location" placeholder="Location (Remote/City)" required 
+                   style="padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: white;">
+
+            <textarea name="notes" placeholder="Notes (Optional)" rows="3" 
+                      style="padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: white; font-family: inherit;"></textarea>
+
+            <textarea name="jobDescription" placeholder="Paste Full Job Description Here" rows="8" required 
+                      style="padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: white; font-family: inherit;"></textarea>
+
+            <button type="submit" class="btn btn-primary" style="padding: 15px; font-size: 1.1rem;">Post Internship 🚀</button>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" href="/css/style.css">
+
+<head>
+    <title>
+        <%= internship.companyName %> | Details
+    </title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <a href="/" style="color: var(--primary); text-decoration: none; font-weight: bold;">← Back to Dashboard</a>
+            <span class="status-badge" style="background: var(--success); color: white; padding: 8px 16px;">
+                <%= internship.status %>
+            </span>
+        </div>
+
+        <h1 style="font-size: 2.5rem; margin-bottom: 10px;">
+            <%= internship.companyName %>
+        </h1>
+        <h3 style="color: var(--text-muted); margin-bottom: 30px;">
+            <%= internship.jobTitle %> | <%= internship.location %>
+        </h3>
+
+        <!-- Job Description Card -->
+        <div
+            style="background: rgba(255,255,255,0.03); padding: 25px; border-radius: 12px; border: 1px solid var(--border);">
+            <h4 style="margin-top: 0; text-transform: uppercase; letter-spacing: 1px; color: var(--primary);">Job
+                Description (JD)</h4>
+            <pre
+                style="white-space: pre-wrap; color: var(--text-main); font-size: 1rem;"><%= internship.jobDescription %></pre>
+        </div>
+
+        
+
+        
+        <!-- STUDENT SECTION: AI Matcher & Track Button -->
+        <% if (user.role === 'STUDENT') { %>
+            <div style="margin-top: 40px; padding: 30px; border: 2px dashed var(--border); border-radius: 16px; text-align: center;">
+                <h3 style="margin-top: 0;">AI ATS Matcher 🤖</h3>
+                <p style="color: var(--text-muted);">Upload your resume (PDF) to get an AI score against this JD.</p>
+                
+                <form action="/internship/analyze/<%= internship._id %>" method="POST" enctype="multipart/form-data" style="margin-top: 20px;">
+                    <input type="file" name="resume" accept="application/pdf" required 
+                           style="background: var(--bg); border: 1px solid var(--border); padding: 10px; border-radius: 8px; color: white;">
+                    <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Analyze Resume</button>
+                </form>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <% if (locals.isAlreadyTracking) { %>
+                    <div style="background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--success); color: var(--success); display: inline-block;">
+                        ✅ You are already tracking this internship on your dashboard.
+                    </div>
+                <% } else if (internship.creator.role === 'ADMIN') { %>
+                    <p style="color: var(--text-muted);">Want to keep track of this job on your dashboard?</p>
+                    <a href="/internship/track/<%= internship._id %>" class="btn" style="background: var(--success); color: white; display: inline-block;">+ Add to My Dashboard</a>
+                <% } %>
+            </div>
+        <% } %>
+
+        <!-- ADMIN SECTION: Management Portal -->
+        <% if (user.role === 'ADMIN' && internship.creator._id.toString() === user._id.toString()) { %>
+            <div style="margin-top: 40px; border-top: 2px solid var(--border); padding-top: 30px;">
+                <h2 style="color: var(--primary);">Admin Management Portal 🛠️</h2>
+                <p style="color: var(--text-muted);">Manage students who are tracking this internship.</p>
+
+                <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+                    <h3>Applied Students</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Total Applicants: <%= applicants ? applicants.length : 0 %></p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Email</th>
+                                <th>AI Score</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (locals.applicants && applicants.length > 0) { %>
+                                <% applicants.forEach(app => { %>
+                                    <tr>
+                                        <td><strong><%= app.creator.fullName %></strong></td>
+                                        <td><%= app.creator.email %></td>
+                                        <td><%= app.aiScore ? '✅ Analyzed' : '❌ Not Yet' %></td>
+                                        <td>
+                                            <span class="status-badge" style="background: var(--primary);"><%= app.status %></span>
+                                        </td>
+                                        <td>
+                                            <a href="/internship/update-status/<%= app._id %>" class="btn" style="background: var(--success); font-size: 0.8rem;">Update Status</a>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No students have tracked this job yet.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <% } %>
+
+        <!-- AI RESULTS -->
+        <% if (locals.aiResult) { %>
+            <div class="ai-box"
+                style="margin-top: 40px; background: rgba(99, 102, 241, 0.15); border: 1px solid var(--primary);">
+                <h2 style="color: var(--primary); margin-top: 0;">AI Analysis Report 📊</h2>
+                <pre
+                    style="white-space: pre-wrap; font-family: inherit; font-size: 1.1rem; line-height: 1.8; color: #e2e8f0;"><%= aiResult %></pre>
+            </div>
+            <% } %>
+    </div>
+</body>
+
+</html>

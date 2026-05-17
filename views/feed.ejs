@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Board | InternTrack</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <a href="/" style="color: var(--primary); text-decoration: none; font-weight: bold;">← Back to My Dashboard</a>
+            <h1 style="margin: 0;">Official Internship Board 🏢</h1>
+        </div>
+
+        <p style="color: var(--text-muted); margin-bottom: 30px;">Browse official opportunities posted by verified Admins.</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+            <% jobs.forEach(job => { %>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 25px; border-radius: 12px; transition: 0.3s;" 
+                     onmouseover="this.style.borderColor='var(--primary)'" 
+                     onmouseout="this.style.borderColor='var(--border)'">
+                    <h3 style="margin-top: 0; color: var(--primary);"><%= job.companyName %></h3>
+                    <p style="font-weight: bold; margin-bottom: 5px;"><%= job.jobTitle %></p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;"><%= job.location %></p>
+                    
+                    <a href="/internship/view/<%= job._id %>" class="btn btn-primary" style="width: 100%; text-align: center; box-sizing: border-box;">View & Apply</a>
+                </div>
+            <% }) %>
+        </div>
+
+        <% if (jobs.length === 0) { %>
+            <div style="text-align: center; padding: 60px; color: var(--text-muted);">
+                <p>No official internships have been posted yet. Check back soon!</p>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>

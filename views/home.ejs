@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="/css/style.css">
+
+<head>
+    <title>InternTrack Pro | Home</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- We wrap everything in our glass 'container' -->
+    <div class="container">
+        
+        <!-- Header Section -->
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 20px;">
+            <h1 style="margin: 0;">Welcome, <%= user.fullName %> 👋</h1>
+            <a href="/internship/feed" class="btn" style="background: var(--primary); color: white; margin-right: 10px;">Browse Job Board 🏢</a>
+
+            <a href="/user/logout" class="btn" style="background: #ef4444; color: white;">Logout</a>
+        </div>
+
+        <h3>Your Application Dashboard</h3>
+
+        <!-- Stats Row -->
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px;">
+    <div style="background: rgba(99, 102, 241, 0.1); padding: 20px; border-radius: 12px; border: 1px solid var(--border); text-align: center;">
+        <h4 style="margin: 0; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Total Applications</h4>
+        <h2 style="margin: 10px 0 0 0; font-size: 2rem; color: var(--primary);"><%= stats.total %></h2>
+    </div>
+    <div style="background: rgba(16, 185, 129, 0.1); padding: 20px; border-radius: 12px; border: 1px solid var(--border); text-align: center;">
+        <h4 style="margin: 0; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Interviews</h4>
+        <h2 style="margin: 10px 0 0 0; font-size: 2rem; color: var(--success);"><%= stats.interviews %></h2>
+    </div>
+    <div style="background: rgba(245, 158, 11, 0.1); padding: 20px; border-radius: 12px; border: 1px solid var(--border); text-align: center;">
+        <h4 style="margin: 0; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Success Rate</h4>
+        <h2 style="margin: 10px 0 0 0; font-size: 2rem; color: #f59e0b;">
+            <%= stats.total > 0 ? Math.round((stats.interviews / stats.total) * 100) : 0 %>%
+        </h2>
+    </div>
+</div>
+
+
+        <% if (locals.internships && internships.length > 0) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Job Title</th>
+                        <th>Status</th>
+                        <th>Location</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% internships.forEach(internship => { %>
+                        <tr>
+                            <td><strong><%= internship.companyName %></strong></td>
+                            <td><%= internship.jobTitle %></td>
+                            <td>
+                                <!-- A sleek status badge -->
+                                <span class="status-badge" style="background: var(--primary); color: white;">
+                                    <%= internship.status || 'Applied' %>
+                                </span>
+                            </td>
+                            <td><%= internship.location %></td>
+                            <td><a href="/internship/view/<%= internship._id %>" class="btn btn-primary" style="font-size: 0.85rem;">View Details</a></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <div style="text-align: center; padding: 40px; background: rgba(255,255,255,0.02); border-radius: 8px; margin-top: 20px;">
+                <p style="color: var(--text-muted);">You haven't tracked any applications yet.</p>
+            </div>
+        <% } %>
+
+        <br>
+        
+        <!-- Admin Only Button -->
+        <% if (locals.user && user.role === 'ADMIN') { %>
+            <a href="/internship/add-new" class="btn btn-primary" style="background: var(--success); margin-top: 20px;">+ Add Official Internship</a>
+        <% } %> 
+        
+    </div>
+</body>
+
+
+</html>
