@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const Internship = require("./models/internship");
 
@@ -15,7 +16,7 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose"); // 1. Import the translator
 
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 
 app.use(cookieParser()); // Ensure this is already there
@@ -28,7 +29,7 @@ app.set("views", path.resolve("./views"));
 
 
 // 2. Connect to the Database
-mongoose.connect("mongodb://127.0.0.1:27017/interntrack")
+mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("✅ MongoDB Connected"))
     .catch((err) => console.log("❌ Mongo Error", err));
 
