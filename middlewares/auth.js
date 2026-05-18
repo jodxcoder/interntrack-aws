@@ -25,7 +25,17 @@ function checkForAdminOnly(req,res,next){
     }
     next();
 }
+
+function restrictToLoggedIn(req, res, next) {
+    if (!req.user) {
+        return res.redirect("/user/signin");
+    }
+    next();
+}
+
 module.exports = {
     checkForAuthenticationCookie,
-    checkForAdminOnly
+    checkForAdminOnly,
+    restrictToLoggedIn
 };
+

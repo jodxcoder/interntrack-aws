@@ -7,7 +7,7 @@ const internshipRoutes = require("./routes/internship");
 
 
 const path = require("path");
-const { checkForAuthenticationCookie } = require("./middlewares/auth");
+const { checkForAuthenticationCookie, restrictToLoggedIn } = require("./middlewares/auth");
 const cookieParser = require("cookie-parser");
 
 
@@ -62,7 +62,7 @@ app.get("/", async (req, res) => {
 
 
 app.use('/user', userRoutes);
-app.use("/internship", internshipRoutes);
+app.use("/internship", restrictToLoggedIn, internshipRoutes);
 
 
 
